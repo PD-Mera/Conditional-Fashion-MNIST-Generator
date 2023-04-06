@@ -71,3 +71,4 @@ python tools/infer.py
 ## Reference
 
 - [Conditional GAN (cGAN)](https://nttuan8.com/bai-3-conditional-gan-cgan/)
+- [Fashion MNIST Dataset in PNG](https://github.com/DeepLenin/fashion-mnist_png)
