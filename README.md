@@ -1,6 +1,6 @@
-# Conditional Fashion MNIST Image Generation with cGAN
+# Conditional Fashion MNIST Image Generation with Conditional GAN (cGAN)
 
-Implement **cGAN** to generate Fashion MNIST images of specific class
+Implement **Conditional GAN (cGAN)** to generate Fashion MNIST images of specific class
 
 ![asset](./assets/sample.jpg "asset")
 
