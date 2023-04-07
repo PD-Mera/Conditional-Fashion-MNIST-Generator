@@ -8,6 +8,7 @@ from cfg.cfg import Config
 from src.dataloader import LoadDataset
 from src.model import Generator, Discriminator
 from src.plot import draw_plot
+from src.metrics.fid import *
 
 class Trainer:
     def __init__(self, config: Config):
@@ -15,9 +16,9 @@ class Trainer:
         self.config = config
         self.seed_everything()
 
-        train_data = LoadDataset(config)
+        self.train_data = LoadDataset(config)
         self.train_loader = DataLoader(
-            train_data, 
+            self.train_data, 
             batch_size=config.train_batch_size, 
             shuffle=True,
             num_workers=config.train_num_worker
@@ -38,6 +39,23 @@ class Trainer:
 
         self.fixed_noise = torch.randn([config.num_col * config.num_row, config.input_dims]).to(self.device)
         
+
+        if os.path.isfile(f"{self.config.metrics}_metrics/mu.npy"):
+            if self.config.reload_metrics:
+                self.mu_train, self.sigma_train = self.compute_statistics_trainset()
+            else:
+                self.mu_train = np.load(f"{self.config.metrics}_metrics/mu.npy")
+                self.sigma_train = np.load(f"{self.config.metrics}_metrics/sigma.npy")
+        else:
+            self.mu_train, self.sigma_train = self.compute_statistics_trainset()
+
+        self.inception_dims = 2048
+        self.inception_model = init_inception_model(dims = self.inception_dims, device = self.device)
+
+        self.best_fid_value = 1000000
+
+        self.save_string = "Epoch,lossD,lossG,FID\n"
+
 
     def seed_everything(self):
         torch.manual_seed(self.config.seed)
@@ -129,10 +147,16 @@ class Trainer:
     def train(self):
         for epoch in range(self.config.EPOCH):
             loss_D, loss_G = self.train_one_epoch()
-            print(f"Epoch {epoch}: Loss D: {loss_D} | Loss G: {loss_G}")
-            self.save_model()
-            self.net_G.eval()
 
+            fid_value = self.eval()
+            print(f"Epoch {epoch}: Loss D: {loss_D} | Loss G: {loss_G} | FID score: {fid_value}")
+            
+            if fid_value < self.best_fid_value:
+                self.best_fid_value = fid_value
+                self.save_model()
+
+            self.net_G.eval()
+            
             self.fixed_label = torch.zeros([self.config.num_col * self.config.num_row, 10]).to(self.device)
             self.fixed_label[:, random.randint(0, 9)] = 1.0
             outputs = self.net_G(self.fixed_noise, self.fixed_label)
@@ -141,7 +165,36 @@ class Trainer:
             
             draw_plot(outputs, self.config, name = "last")
 
+            self.save_string += f"{epoch},{loss_D},{loss_G},{fid_value}\n"
 
+            with open(os.path.join(self.config.exp_run_folder, self.config.training_log_savepath), mode = "w") as f:
+                f.write(self.save_string)
+
+    def compute_statistics_trainset(self):
+        
+        fid_train_loader = DataLoader(
+                self.train_data,
+                batch_size=self.config.train_batch_size // 2, 
+                shuffle=False)
+        self.mu_train, self.sigma_train = calculate_activation_statistics(fid_train_loader, self.inception_model, self.inception_dims, self.device)
+        # print(f"Trainset: mu = {self.mu_train} | sigma = {self.sigma_train}")
+        np.save(f"{self.config.metrics}_metrics/mu.npy", self.mu_train)
+        np.save(f"{self.config.metrics}_metrics/sigma.npy", self.sigma_train)
+        return self.mu_train, self.sigma_train
+
+    def eval(self, batch_size = 256):
+        self.net_G.eval()
+        
+        pred_data = LoadPred(self.config, self.net_G, size = 256)
+        pred_loader = DataLoader(
+            pred_data,
+            batch_size=batch_size, 
+            shuffle=False)
+        mu_pred, sigma_pred = calculate_activation_statistics(pred_loader, self.inception_model, self.inception_dims, self.device)
+
+        fid_value = calculate_frechet_distance(self.mu_train, self.sigma_train, mu_pred, sigma_pred)
+
+        return fid_value
         
         
 

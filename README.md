@@ -44,6 +44,8 @@ Here is pretrained for [Net_D]()
 
 ## Train
 
+Firstly, compute statistics for train dataset (mean and variance)
+
 You can modify config in `cfg/cfg.py` and run
 
 ``` bash
@@ -68,7 +70,21 @@ python tools/infer.py
 
 ![asset0](./assets/sample_1.jpg "asset0")
 
+## Citation
+
+``` bibtex
+@misc{Seitzer2020FID,
+  author={Maximilian Seitzer},
+  title={{pytorch-fid: FID Score for PyTorch}},
+  month={August},
+  year={2020},
+  note={Version 0.3.0},
+  howpublished={\url{https://github.com/mseitzer/pytorch-fid}},
+}
+```
+
 ## Reference
 
 - [Conditional GAN (cGAN)](https://nttuan8.com/bai-3-conditional-gan-cgan/)
 - [Fashion MNIST Dataset in PNG](https://github.com/DeepLenin/fashion-mnist_png)
+- [FID score in pytorch](https://github.com/mseitzer/pytorch-fid)

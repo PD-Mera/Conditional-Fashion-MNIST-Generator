@@ -12,7 +12,7 @@ class Config:
         
         self.phase = phase
         self.input_dims = 128
-        self.best_checkpoint = 'training_runs/exp20/model_G_best.pth'
+        self.best_checkpoint = ''
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         ### Image ###
@@ -38,11 +38,18 @@ class Config:
             shutil.copy(os.path.abspath(__file__), self.exp_run_folder)
         self.model_G_savepath = "model_G_best.pth"
         self.model_D_savepath = "model_D_best.pth"
+        self.training_log_savepath = "log.csv"
 
         ### Hyperparameter ###
         self.seed = 42
         self.flip_label = 0.0
         
+        ### Metrics ###
+        self.metrics = "FID" # None or FID
+        if self.metrics is not None:
+            os.makedirs(f"{self.metrics}_metrics", exist_ok=True)
+        self.reload_metrics = False
+
         ### Test config ###
         self.output_dir = "outputs"
         self.num_col = 10

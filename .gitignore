@@ -1,6 +1,7 @@
 __pycache__/
 venv/
 
+FID_metrics/
 data*/
 weights/
 training_runs/
