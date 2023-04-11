@@ -100,8 +100,7 @@ The training set has 60,000 images and the test set has 10,000 images.
 Fashion-MNIST is intended to serve as a direct drop-in replacement for the
 original MNIST dataset for benchmarking machine learning algorithms, as it
 shares the same image size, data format and the structure of training and
-testing splits. The dataset is freely available at
-https://github.com/zalandoresearch/fashion-mnist},
+testing splits. The dataset is freely available at https://github.com/zalandoresearch/fashion-mnist},
   added-at = {2021-10-12T06:50:19.000+0200},
   author = {Xiao, Han and Rasul, Kashif and Vollgraf, Roland},
   biburl = {https://www.bibsonomy.org/bibtex/2de51af2f6c7d8b0f4cd84a428bb17967/andolab},
@@ -109,7 +108,7 @@ https://github.com/zalandoresearch/fashion-mnist},
   interhash = {0c81f9a6170118f14703b6796101ce40},
   intrahash = {de51af2f6c7d8b0f4cd84a428bb17967},
   keywords = {Fashion-MNIST Image_Classification_Benchmark},
-  note = {cite arxiv:1708.07747Comment: Dataset is freely available at  https://github.com/zalandoresearch/fashion-mnist Benchmark is available at  http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/},
+  note = {cite arxiv:1708.07747Comment: Dataset is freely available at https://github.com/zalandoresearch/fashion-mnist Benchmark is available at http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/},
   timestamp = {2023-01-31T20:34:07.000+0100},
   title = {Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine Learning
   Algorithms},
