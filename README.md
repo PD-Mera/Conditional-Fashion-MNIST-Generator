@@ -109,8 +109,6 @@ After run, FID minimum score is **56.36** at epoch 409
   year = 2017
 }
 
-
-
 @misc{Seitzer2020FID,
   author={Maximilian Seitzer},
   title={{pytorch-fid: FID Score for PyTorch}},
