@@ -3,7 +3,6 @@ import torch
 
 class Config:
     def __init__(self, phase = "train"):
-        super(Config, self).__init__()
         self.data_path = [
             "./data/train/",
             "./data/test/",
@@ -23,7 +22,7 @@ class Config:
 
         ### Train config ###
         self.EPOCH = 1000
-        self.train_batch_size = 512
+        self.train_batch_size = 128
         self.train_num_worker = 8
         self.learning_rate_G = 0.0002
         self.learning_rate_D = 0.0002
@@ -68,3 +67,9 @@ class Config:
 
         return exp_number
     
+class ConfigInference(Config):
+    def __init__(self, phase = "valid"):
+        super().__init__(phase)
+        self.best_checkpoint = './training_runs/exp63/model_G_best.pth'
+        self.num_col = 10
+        self.num_row = 10

@@ -10,14 +10,12 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from cfg.cfg import Config
+from cfg.cfg import ConfigInference
 from src.model import Generator
 from src.plot import draw_plot
 
 
-
-
-def infer(config: Config):
+def infer(config: ConfigInference):
     device = config.device
 
     net_G = Generator(num_classes=config.total_classes, in_channels=config.input_dims).to(device)
@@ -33,5 +31,5 @@ def infer(config: Config):
     draw_plot(outputs, config)
 
 if __name__ == "__main__":
-    config = Config(phase = 'valid')
+    config = ConfigInference(phase = 'valid')
     infer(config)
